@@ -1,0 +1,161 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Student {
+    int id;
+    char name[50];
+    float grade;
+    struct Student* next;
+} Student;
+
+Student* head = NULL;
+
+void printMenu() {
+    printf("\n---- Student Database ----\n");
+    printf("1. Add Student\n");
+    printf("2. Display Students\n");
+    printf("3. Update Student\n");
+    printf("4. Delete Student\n");
+    printf("5. Exit\n");
+    printf("Enter your choice: ");
+}
+
+Student* createStudent(int id, const char* name, float grade) {
+    Student* newStudent = (Student*)malloc(sizeof(Student));
+    newStudent->id = id;
+    strcpy(newStudent->name, name);
+    newStudent->grade = grade;
+    newStudent->next = NULL;
+    return newStudent;
+}
+
+void addStudent() {
+    int id;
+    char name[50];
+    float grade;
+
+    printf("Enter student ID: ");
+    scanf("%d", &id);
+    printf("Enter student name: ");
+    scanf(" %[^\n]s", name);  // reads a line with spaces
+    printf("Enter student grade: ");
+    scanf("%f", &grade);
+
+    Student* newStudent = createStudent(id, name, grade);
+
+    if (head == NULL) {
+        head = newStudent;
+    } else {
+        Student* temp = head;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newStudent;
+    }
+
+    printf("Student added successfully!\n");
+}
+
+void displayStudents() {
+    if (head == NULL) {
+        printf("No students to display.\n");
+        return;
+    }
+
+    Student* temp = head;
+    printf("\n--- Student Records ---\n");
+    printf("ID\tName\t\tGrade\n");
+    printf("------------------------------------\n");
+
+    while (temp != NULL) {
+        printf("%d\t%s\t%.2f\n", temp->id, temp->name, temp->grade);
+        temp = temp->next;
+    }
+}
+
+void updateStudent() {
+    int id;
+    printf("Enter student ID to update: ");
+    scanf("%d", &id);
+
+    Student* temp = head;
+    while (temp != NULL) {
+        if (temp->id == id) {
+            printf("Student found! Enter new details.\n");
+            printf("Enter new name: ");
+            scanf(" %[^\n]s", temp->name);
+            printf("Enter new grade: ");
+            scanf("%f", &temp->grade);
+            printf("Student updated successfully!\n");
+            return;
+        }
+        temp = temp->next;
+    }
+
+    printf("Student with ID %d not found.\n", id);
+}
+
+void deleteStudent() {
+    int id;
+    printf("Enter student ID to delete: ");
+    scanf("%d", &id);
+
+    if (head == NULL) {
+        printf("No students to delete.\n");
+        return;
+    }
+
+    if (head->id == id) {
+        Student* temp = head;
+        head = head->next;
+        free(temp);
+        printf("Student with ID %d deleted successfully!\n", id);
+        return;
+    }
+
+    Student* temp = head;
+    while (temp->next != NULL) {
+        if (temp->next->id == id) {
+            Student* toDelete = temp->next;
+            temp->next = temp->next->next;
+            free(toDelete);
+            printf("Student with ID %d deleted successfully!\n", id);
+            return;
+        }
+        temp = temp->next;
+    }
+
+    printf("Student with ID %d not found.\n", id);
+}
+
+int main() {
+    int choice;
+
+    while (1) {
+        printMenu();
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addStudent();
+                break;
+            case 2:
+                displayStudents();
+                break;
+            case 3:
+                updateStudent();
+                break;
+            case 4:
+                deleteStudent();
+                break;
+            case 5:
+                printf("Exiting program...\n");
+                return 0;
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    }
+
+    return 0;
+}
