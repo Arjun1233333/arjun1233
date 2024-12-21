@@ -1,0 +1,94 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_NUMBERS 1000
+
+
+float calculateAverage(int numbers[], int size) {
+    int sum = 0;
+    for (int i = 0; i < size; i++) {
+        sum += numbers[i];
+    }
+    return (float)sum / size;
+}
+
+
+int findMin(int numbers[], int size) {
+    int min = numbers[0];
+    for (int i = 1; i < size; i++) {
+        if (numbers[i] < min) {
+            min = numbers[i];
+        }
+    }
+    return min;
+}
+
+
+int findMax(int numbers[], int size) {
+    int max = numbers[0];
+    for (int i = 1; i < size; i++) {
+        if (numbers[i] > max) {
+            max = numbers[i];
+        }
+    }
+    return max;
+}
+
+
+int readNumbersFromFile(const char *filename, int numbers[]) {
+    FILE *file = fopen(filename, "r");
+    if (!file) {
+        printf("Error opening file.\n");
+        return -1;
+    }
+
+    int count = 0;
+    while (fscanf(file, "%d", &numbers[count]) == 1) {
+        count++;
+        if (count >= MAX_NUMBERS) {
+            break;
+        }
+    }
+    fclose(file);
+    return count;
+}
+
+
+void writeResultsToFile(const char *filename, float average, int min, int max) {
+    FILE *file = fopen(filename, "w");
+    if (!file) {
+        printf("Error opening file.\n");
+        return;
+    }
+    fprintf(file, "Average: %.2f\n", average);
+    fprintf(file, "Minimum: %d\n", min);
+    fprintf(file, "Maximum: %d\n", max);
+    fclose(file);
+
+int main() {
+    int numbers[MAX_NUMBERS];
+    int count = readNumbersFromFile("input.txt", numbers);
+    if (count == -1) {
+        return 1;
+    }
+
+    if (count == 0) {
+        printf("No numbers to process.\n");
+        return 1;
+    }
+
+    
+    float average = calculateAverage(numbers, count);
+    int min = findMin(numbers, count);
+    int max = findMax(numbers, count);
+
+    
+    printf("Average: %.2f\n", average);
+    printf("Minimum: %d\n", min);
+    printf("Maximum: %d\n", max);
+
+  
+    writeResultsToFile("output.txt", average, min, max);
+
+    return 0;
+}
