@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_SIZE 100
+
+long long func1(int x) {
+    long long result = 1;
+    for (int i = 1; i <= x; i++) {
+        result *= i;
+    }
+    return result;
+}
+
+int func2(int x) {
+    if (x <= 1) return 0;
+    for (int i = 2; i <= x / 2; i++) {
+        if (x % i == 0) return 0;
+    }
+    return 1;
+}
+
+void func3(char str[]) {
+    int start = 0, end = strlen(str) - 1;
+    while (start < end) {
+        char temp = str[start];
+        str[start] = str[end];
+        str[end] = temp;
+        start++;
+        end--;
+    }
+}
+
+void func4(int n) {
+    int a = 0, b = 1, next;
+    for (int i = 0; i < n; i++) {
+        if (i <= 1) next = i;
+        else {
+            next = a + b;
+            a = b;
+            b = next;
+        }
+        printf("%d ", next);
+    }
+    printf("\n");
+}
+
+int func5(int x) {
+    int original = x, reversed = 0;
+    while (x != 0) {
+        reversed = reversed * 10 + x % 10;
+        x /= 10;
+    }
+    return original == reversed;
+}
+
+void func6(int m, int n, int A[m][n], int B[m][n], int C[m][n]) {
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            C[i][j] = A[i][j] + B[i][j];
+        }
+    }
+}
+
+void func7(int m, int n, int mat[m][n]) {
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            printf("%d ", mat[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void func8(int arr[], int size) {
+    for (int i = 0; i < size - 1; i++) {
+        for (int j = 0; j < size - 1 - i; j++) {
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+
+void func9() {
+    int *arr, size;
+    scanf("%d", &size);
+    arr = (int *
